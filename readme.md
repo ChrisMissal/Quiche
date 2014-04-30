@@ -2,6 +2,8 @@
 
 A tasty little treat that turns your objects into query strings.
 
+[![chrismissal MyGet Build Status](https://www.myget.org/BuildSource/Badge/chrismissal?identifier=347aee1d-fd73-451d-845b-b2c834150a82)](https://www.myget.org/)
+
 ## How to Use Quiche
 
 ```csharp
