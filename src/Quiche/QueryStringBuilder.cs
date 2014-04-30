@@ -35,7 +35,7 @@
             if (!property.PropertyType.IsArray)
                 return GetQueryString(property.GetValue(value, null), property.Name);
 
-            var objects = ((IEnumerable)property.GetValue(value)).Cast<object>();
+            var objects = ((IEnumerable)property.GetValue(value, null)).Cast<object>();
             return objects.Aggregate("", (s, i) => s + GetQueryString(i, property.Name));
         }
 
