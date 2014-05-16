@@ -32,8 +32,11 @@ namespace Quiche.Tests.Features
         {
             var attr = caseExecution.Case.Method.GetCustomAttribute<FeatureAttribute>(true);
 
-            var writer = GetWriter(attr.ReferenceAssembly);
-            writer.Write(caseExecution.Case);
+            if (attr != null)
+            {
+                var writer = GetWriter(attr.ReferenceAssembly);
+                writer.Write(caseExecution.Case);
+            }
 
             innerbehavior();
         }
