@@ -25,6 +25,19 @@
             result.ShouldBe("?Items=12&Items=34&Items=56");
         }
 
+        [Active("Turn object into query string with custom field converter")]
+        public void FlatObject_should_use_custom_converter_func()
+        {
+            var builder = new Builder(x =>
+            {
+                x.FieldCasing = FieldCasing.Custom;
+                x.CustomFieldConverter = s => s.ToUpper();
+            });
+            var result = builder.ToQueryString(new { Test = "blah" });
+
+            result.ShouldBe("?TEST=blah");
+        }
+
         [Active("Turn object into query string with camel case fields")]
         public void MixedObject_should_return_expected_string_with_camel_case_fields()
         {

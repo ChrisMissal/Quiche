@@ -12,16 +12,19 @@
         private readonly FieldBuilder _fieldBuilder = new FieldBuilder();
 
         private readonly FieldCasing _fieldCasing;
+        private readonly Func<string, string> _customFieldConverter;
 
         private readonly IDictionary<FieldCasing, Func<string, string>> _fieldConverters = new Dictionary<FieldCasing, Func<string, string>>
         {
             { FieldCasing.Default, s => s },
             { FieldCasing.CamelCase, ConvertToCamelCase },
+            { FieldCasing.Custom, null },
         };
 
         public QueryStringBuilder(BuilderSettings settings)
         {
             _fieldCasing = settings.FieldCasing;
+            _customFieldConverter = settings.CustomFieldConverter ?? _fieldConverters[FieldCasing.Default];
         }
 
         public string Build(object value)
@@ -67,7 +70,7 @@
 
         private string GetPropertyValueQuerySTring(object value, string field, params string[] parentFields)
         {
-            var fieldConverter = _fieldConverters[_fieldCasing];
+            var fieldConverter = _fieldConverters[_fieldCasing] ?? _customFieldConverter;
             var greatestAncestorField = parentFields.First();
             var descendantFields = parentFields.Concat(new[] { field })
                 .Skip(1)
@@ -78,7 +81,7 @@
 
         private string GetSimpleValueQueryString(object value, string field)
         {
-            return _fieldBuilder.Build(value, field, _fieldConverters[_fieldCasing]);
+            return _fieldBuilder.Build(value, field, _fieldConverters[_fieldCasing] ?? _customFieldConverter);
         }
 
         private static string ConvertToCamelCase(string field)
