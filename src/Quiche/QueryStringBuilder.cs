@@ -19,9 +19,9 @@
             { FieldCasing.CamelCase, ConvertToCamelCase },
         };
 
-        public QueryStringBuilder(FieldCasing fieldCasing)
+        public QueryStringBuilder(BuilderSettings settings)
         {
-            _fieldCasing = fieldCasing;
+            _fieldCasing = settings.FieldCasing;
         }
 
         public string Build(object value)

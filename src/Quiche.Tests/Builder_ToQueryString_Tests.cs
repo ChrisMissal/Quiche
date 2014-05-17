@@ -38,8 +38,10 @@
         [Active("Turn object value into dictionary")]
         public void ObjectWithChildObject_should_return_expected_string()
         {
-            var settings = new BuilderSettings { FieldCasing = FieldCasing.CamelCase };
-            var builder = new Builder(settings);
+            var builder = new Builder(x =>
+            {
+                x.FieldCasing = FieldCasing.CamelCase;
+            });
             var result = builder.ToQueryString(new ObjectWithChildObject { Child = new FlatObject { Id = 12, Name = "Fred Jr" }, Name = "Fred" });
 
             result.ShouldBe("?child[id]=12&child[name]=Fred+Jr&name=Fred");
