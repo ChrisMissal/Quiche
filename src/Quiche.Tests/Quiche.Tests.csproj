@@ -50,6 +50,7 @@
     <Compile Include="Features\FeaturesConvention.cs" />
     <Compile Include="Features\FeatureWriter.cs" />
     <Compile Include="Features\RemovedAttribute.cs" />
+    <Compile Include="PerformanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples\FlatObject.cs" />
   </ItemGroup>
