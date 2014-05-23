@@ -1,16 +1,14 @@
 namespace Quiche
 {
     using System;
-    using System.Web;
 
     internal class FieldBuilder
     {
-        public string Build(object value, string field, Func<string, string> fieldConverter)
+        public Field Build(object value, string field, Func<string, string> fieldConverter)
         {
-            var url = value != null ? value.ToString() : "";
-            var fieldValue = fieldConverter(field);
+            var key = fieldConverter(field);
 
-            return string.Format("{0}={1}&", fieldValue, HttpUtility.UrlEncode(url));
+            return new Field(key, value != null ? value.ToString() : "");
         }
     }
 }

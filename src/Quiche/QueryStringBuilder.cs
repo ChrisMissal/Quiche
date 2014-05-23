@@ -72,21 +72,21 @@
             var propertyValue = property.GetValue(value, null);
 
             if (propertyValue is ValueType || propertyValue is string)
-                return GetPropertyQueryString(propertyValue, fieldName, parentFields);
+                return GetPropertyQueryString(propertyValue, fieldName, parentFields).ToString();
 
             var propString = GetObjectString(propertyValue, parentFields.Concat(new[] { fieldName }).ToArray());
 
             return propString;
         }
 
-        private string GetPropertyQueryString(object propertyValue, string fieldName, params string[] parentFields)
+        private Field GetPropertyQueryString(object propertyValue, string fieldName, params string[] parentFields)
         {
             return (parentFields != null && parentFields.Length > 0)
                         ? GetPropertyValueQuerySTring(propertyValue, fieldName, parentFields)
                         : GetSimpleValueQueryString(propertyValue, fieldName);
         }
 
-        private string GetPropertyValueQuerySTring(object value, string field, params string[] parentFields)
+        private Field GetPropertyValueQuerySTring(object value, string field, params string[] parentFields)
         {
             var fieldConverter = _fieldConverters[_fieldCasing] ?? _customFieldConverter;
             var greatestAncestorField = parentFields.First();
@@ -97,7 +97,7 @@
             return _fieldBuilder.Build(value,greatestAncestorField + descendantFields, fieldConverter);
         }
 
-        private string GetSimpleValueQueryString(object value, string field)
+        private Field GetSimpleValueQueryString(object value, string field)
         {
             return _fieldBuilder.Build(value, field, _fieldConverters[_fieldCasing] ?? _customFieldConverter);
         }
