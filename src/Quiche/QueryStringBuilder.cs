@@ -10,12 +10,12 @@
     {
         private readonly PropertyBuilder _propertyBuilder;
 
-        public QueryStringBuilder(BuilderSettings settings)
+        internal QueryStringBuilder(BuilderSettings settings)
         {
             _propertyBuilder = new PropertyBuilder(settings);
         }
 
-        public string Build(object value)
+        internal string Build(object value)
         {
             return "?" + GetObjectString(value);
         }

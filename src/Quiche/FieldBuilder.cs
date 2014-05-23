@@ -1,12 +1,10 @@
 namespace Quiche
 {
-    using System;
-
     internal class FieldBuilder
     {
-        public Field Build(object value, string field, Func<string, string> fieldConverter)
+        internal Field Build(object value, string field, FieldConverter fieldConverter)
         {
-            var key = fieldConverter(field);
+            var key = fieldConverter.Convert(field);
 
             return new Field(key, value != null ? value.ToString() : "");
         }
