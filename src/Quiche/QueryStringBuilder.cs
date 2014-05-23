@@ -41,8 +41,26 @@
                     return BuildQueryStringFromObject(value, property, parentFields);
 
                 var propertyValue = property.GetValue(value, null);
-                var objects = ((IEnumerable) propertyValue).Cast<object>();
-                return objects.Aggregate("", (s, i) => s + GetPropertyQueryString(i, property.Name, parentFields));
+                var objects = ((IEnumerable)propertyValue).Cast<object>().ToArray();
+
+                if (objects.Select(x => x.GetType()).Distinct().Count() == 1)
+                    return objects.Aggregate("", (s, i) => s + GetPropertyQueryString(i, property.Name, parentFields));
+
+                return objects.Select((i, index) => new Tuple<int, object>(index, i)).Aggregate("", (s, pair) =>
+                {
+                    var i = pair.Item2;
+                    var propertyName = property.Name;
+                    if (i is ValueType)
+                    {
+                        propertyName += "[]";
+                        return s + GetPropertyQueryString(i, propertyName, parentFields);
+                    }
+                    else
+                    {
+                        parentFields = new[] { propertyName, Convert.ToString(pair.Item1) }.Concat(parentFields).ToArray();
+                        return s + GetObjectString(i, parentFields).TrimEnd('&');
+                    }
+                });
             });
             var joined = string.Join("", values);
             return (parentFields == null || parentFields.Length == 0) ? joined.TrimEnd('&') : joined;
@@ -56,7 +74,7 @@
             if (propertyValue is ValueType || propertyValue is string)
                 return GetPropertyQueryString(propertyValue, fieldName, parentFields);
 
-            var propString = GetObjectString(propertyValue,  parentFields.Concat(new[] { fieldName }).ToArray());
+            var propString = GetObjectString(propertyValue, parentFields.Concat(new[] { fieldName }).ToArray());
 
             return propString;
         }

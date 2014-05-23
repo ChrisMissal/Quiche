@@ -78,5 +78,14 @@
 
             result.ShouldBe("?a[b]=1");
         }
+
+        public void Complex_object_array_should_return_expected_string()
+        {
+            var builder = new Builder();
+            var obj = new { a = new { b = 1, c = 2 }, d = new object[] { 3, 4, new { e = 5 } } };
+            var result = builder.ToQueryString(obj);
+
+            result.ShouldBe("?a[b]=1&a[c]=2&d[]=3&d[]=4&d[2][e]=5");
+        }
     }
 }
