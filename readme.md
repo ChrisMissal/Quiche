@@ -20,7 +20,7 @@ result.ShouldBe("?ItemNames=one&ItemNames=two&TextMessage=programming+is+fun");
 
 ## Features
 
-[Version 0.0.1](Quiche-0.0.1-features.md)
+[Version 0.0.2](docs/Quiche-0.0.2-features.md)
 
 ### License
 

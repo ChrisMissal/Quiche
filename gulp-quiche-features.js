@@ -7,7 +7,7 @@ var map = require('map-stream')
 
 module.exports = function () {
 	return map(function (file, cb) {
-		var baseName = path.basename(file.path, '.csv');
+		var baseName = 'docs/' + path.basename(file.path, '.csv');
 		var dest = baseName + '.md';
 		var stream = fs.createWriteStream(dest);
 		stream.once('open', function(fd) {
