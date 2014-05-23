@@ -2,29 +2,17 @@
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using Settings;
 
     internal class QueryStringBuilder
     {
-        private readonly FieldBuilder _fieldBuilder = new FieldBuilder();
-
-        private readonly FieldCasing _fieldCasing;
-        private readonly Func<string, string> _customFieldConverter;
-
-        private readonly IDictionary<FieldCasing, Func<string, string>> _fieldConverters = new Dictionary<FieldCasing, Func<string, string>>
-        {
-            { FieldCasing.Default, s => s },
-            { FieldCasing.CamelCase, ConvertToCamelCase },
-            { FieldCasing.Custom, null },
-        };
+        private readonly PropertyBuilder _propertyBuilder;
 
         public QueryStringBuilder(BuilderSettings settings)
         {
-            _fieldCasing = settings.FieldCasing;
-            _customFieldConverter = settings.CustomFieldConverter ?? _fieldConverters[FieldCasing.Default];
+            _propertyBuilder = new PropertyBuilder(settings);
         }
 
         public string Build(object value)
@@ -44,7 +32,7 @@
                 var objects = ((IEnumerable)propertyValue).Cast<object>().ToArray();
 
                 if (objects.Select(x => x.GetType()).Distinct().Count() == 1)
-                    return objects.Aggregate("", (s, i) => s + GetPropertyQueryString(i, property.Name, parentFields));
+                    return objects.Aggregate("", (s, i) => s + _propertyBuilder.Build(i, property.Name, parentFields));
 
                 return objects.Select((i, index) => new Tuple<int, object>(index, i)).Aggregate("", (s, pair) =>
                 {
@@ -53,7 +41,7 @@
                     if (i is ValueType)
                     {
                         propertyName += "[]";
-                        return s + GetPropertyQueryString(i, propertyName, parentFields);
+                        return s + _propertyBuilder.Build(i, propertyName, parentFields);
                     }
                     else
                     {
@@ -72,40 +60,11 @@
             var propertyValue = property.GetValue(value, null);
 
             if (propertyValue is ValueType || propertyValue is string)
-                return GetPropertyQueryString(propertyValue, fieldName, parentFields).ToString();
+                return _propertyBuilder.Build(propertyValue, fieldName, parentFields).ToString();
 
             var propString = GetObjectString(propertyValue, parentFields.Concat(new[] { fieldName }).ToArray());
 
             return propString;
-        }
-
-        private Field GetPropertyQueryString(object propertyValue, string fieldName, params string[] parentFields)
-        {
-            return (parentFields != null && parentFields.Length > 0)
-                        ? GetPropertyValueQuerySTring(propertyValue, fieldName, parentFields)
-                        : GetSimpleValueQueryString(propertyValue, fieldName);
-        }
-
-        private Field GetPropertyValueQuerySTring(object value, string field, params string[] parentFields)
-        {
-            var fieldConverter = _fieldConverters[_fieldCasing] ?? _customFieldConverter;
-            var greatestAncestorField = parentFields.First();
-            var descendantFields = parentFields.Concat(new[] { field })
-                .Skip(1)
-                .Aggregate("", (s, f) => string.Format("{0}[{1}]", s, fieldConverter(f)));
-
-            return _fieldBuilder.Build(value,greatestAncestorField + descendantFields, fieldConverter);
-        }
-
-        private Field GetSimpleValueQueryString(object value, string field)
-        {
-            return _fieldBuilder.Build(value, field, _fieldConverters[_fieldCasing] ?? _customFieldConverter);
-        }
-
-        private static string ConvertToCamelCase(string field)
-        {
-            var firstLetter = field.Substring(0, 1).ToLowerInvariant();
-            return field.ToCharArray().Skip(1).Aggregate(firstLetter, (s, c) => s + c);
         }
     }
 }
