@@ -19,6 +19,7 @@ namespace Quiche
             _arrayBuilder = arrayBuilder;
 
             _mixedObjectArrayBuilder.SetBuilder(GetObjectString);
+            _arrayBuilder.SetBuilder(GetObjectString);
         }
 
         internal Field Build(Parameter parameter)
