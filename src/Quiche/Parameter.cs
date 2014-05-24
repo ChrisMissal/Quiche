@@ -15,8 +15,10 @@ namespace Quiche
             Property = property;
 
             IsArray = property.PropertyType.IsArray;
-            Objects = IsArray
-                ? ((IEnumerable)Property.GetValue(Value, null)).Cast<object>().ToArray()
+
+            var propertyValue = Property.GetValue(Value, null);
+            Objects = (IsArray && propertyValue != null)
+                ? ((IEnumerable)propertyValue).Cast<object>().ToArray()
                 : new object[0];
             IsSingleTypeArray = IsArray && IsArrayOnlyOneType(Objects);
             AreArrayObjectsValueTypes = IsArray && !IsSingleTypeArray;

@@ -98,5 +98,14 @@
 
             result.ShouldBe("?a[b]=1&a[c]=2&d[]=3&d[]=4&d[2][e]=5");
         }
+
+        public void Object_with_null_array_should_return_expected_results()
+        {
+            var builder = new Builder();
+            var obj = new MixedObject();
+            var result = builder.ToQueryString(obj);
+
+            result.ShouldBe("?TextMessage=");
+        }
     }
 }
