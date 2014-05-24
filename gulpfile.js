@@ -1,4 +1,5 @@
 var gulp = require('gulp')
+   , clean = require('gulp-clean')
    , msbuild = require('./gulp-msbuild.js')   
    , exec = require('gulp-exec')
    , path = require('path')
@@ -21,7 +22,9 @@ gulp.task('fixie-tests', ['compile'], function() {
 
    var fixieCommand = path.resolve(process.cwd(), paths.fixieRunner) + ' <%= file.path %>';
 
-   return gulp.src(paths.testAssemblies)            
+   gulp.src(paths.featureFiles).pipe(clean());
+
+   return gulp.src(paths.testAssemblies)
               .pipe(exec(fixieCommand));
 });
 
