@@ -8,10 +8,12 @@ namespace Quiche
     internal class ObjectBuilder
     {
         private readonly PropertyBuilder _propertyBuilder;
+        private readonly NullBuilder _nullBuilder;
 
-        internal ObjectBuilder(PropertyBuilder propertyBuilder)
+        internal ObjectBuilder(PropertyBuilder propertyBuilder, NullBuilder nullBuilder)
         {
             _propertyBuilder = propertyBuilder;
+            _nullBuilder = nullBuilder;
         }
 
         internal string Build(object value, PropertyInfo property, params string[] parentFields)
@@ -21,6 +23,9 @@ namespace Quiche
 
             if (propertyValue is ValueType || propertyValue is string)
                 return _propertyBuilder.Build(propertyValue, fieldName, parentFields).ToString();
+
+            if (propertyValue == null)
+                return _nullBuilder.Build(propertyValue, fieldName, parentFields).ToString();
 
             var propString = GetObjectString(propertyValue, parentFields.Concat(new[] { fieldName }).ToArray());
 

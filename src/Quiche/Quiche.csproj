@@ -41,6 +41,7 @@
     <Compile Include="Field.cs" />
     <Compile Include="FieldBuilder.cs" />
     <Compile Include="FieldConverter.cs" />
+    <Compile Include="NullBuilder.cs" />
     <Compile Include="ObjectBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyBuilder.cs" />

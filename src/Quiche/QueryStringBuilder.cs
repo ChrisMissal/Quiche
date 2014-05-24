@@ -8,7 +8,10 @@
 
         internal QueryStringBuilder(BuilderSettings settings)
         {
-            _objectBuilder = new ObjectBuilder(new PropertyBuilder(settings));
+            var propertyBuilder = new PropertyBuilder(settings);
+            var nullBuilder = new NullBuilder(settings);
+
+            _objectBuilder = new ObjectBuilder(propertyBuilder, nullBuilder);
         }
 
         internal string Build(object value)

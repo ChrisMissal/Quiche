@@ -70,6 +70,17 @@
             result.ShouldBe("?Atmosphere[Crust][UpperMantle][TransitionZone][LowerMantle][OuterCore][InnerCore]=hot");
         }
 
+        [Active("Objects with properties that are null are returned with no value")]
+        public void Objects_with_null_values_are_handled_by_default()
+        {
+            var builder = new Builder();
+            var mixedObj = new MixedObject { TextMessage = null };
+            var obj = new { Id = mixedObj.TextMessage, Name = "test" };
+            var result = builder.ToQueryString(obj);
+
+            result.ShouldBe("?Id=&Name=test");
+        }
+
         public void Simple_parent_child_object_should_return_expected_string()
         {
             var settings = new BuilderSettings { FieldCasing = FieldCasing.CamelCase };
