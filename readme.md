@@ -49,7 +49,7 @@ result.ShouldBe("?TEST=blah");
 
 ## Features
 
-[Version 0.0.2](docs/Quiche-0.0.2-features.md)
+[Version 0.0.3](docs/Quiche-0.0.3-features.md)
 
 ### License
 
