@@ -107,5 +107,25 @@
 
             result.ShouldBe("?TextMessage=");
         }
+
+        public void Array_of_objects_should_return_expected_results()
+        {
+            var args = new
+            {
+                batch = new[]
+                {
+                    new { EMAIL = "blah-dee@gmail.com", EMAIL_TYPE = "text" },
+                    new { EMAIL = "herp-derp@gmail.com", EMAIL_TYPE = "html" },
+                    new { EMAIL = "something@gmail.com", EMAIL_TYPE = "html" },
+                    new { EMAIL = "adksfjkdlsjf@gmail.com", EMAIL_TYPE = "html" },
+                },
+            };
+
+            var builder = new Builder();
+            var result = builder.ToQueryString(args);
+
+            result.ShouldBe("?batch[0][EMAIL]=blah-dee%40gmail.com&batch[0][EMAIL_TYPE]=text&batch[1][EMAIL]=herp-derp%40gmail.com&batch[1][EMAIL_TYPE]=html&batch[2][EMAIL]=something%40gmail.com&batch[2][EMAIL_TYPE]=html&batch[3][EMAIL]=adksfjkdlsjf%40gmail.com&batch[3][EMAIL_TYPE]=html");
+        }
+
     }
 }
