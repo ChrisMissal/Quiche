@@ -1,36 +1,40 @@
 namespace Quiche
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Settings;
 
     internal class MixedObjectArrayBuilder
     {
         private readonly PropertyBuilder _propertyBuilder;
-        private Func<object, string[], string> _builder;
+        private Func<object, string[], IEnumerable<Field>> _builder;
 
         public MixedObjectArrayBuilder(BuilderSettings settings, PropertyBuilder propertyBuilder)
         {
             _propertyBuilder = propertyBuilder;
         }
 
-        internal string Build(Parameter parameter)
+        internal IEnumerable<Field> Build(Parameter parameter)
         {
-            var objectArray = parameter.Objects;
-            return objectArray.Select((i, index) => new Tuple<int, object>(index, i))
-                .Aggregate("", (s, pair) =>
+            var arrayLength = parameter.Objects.Length;
+            for (var index = 0; index < arrayLength; index++)
+            {
+                var obj = parameter.Objects[index];
+                if (obj is ValueType)
                 {
-                    var i = pair.Item2;
-                    if (i is ValueType)
-                    {
-                        return s + _propertyBuilder.Build(i, "", new[] { parameter.Property.Name });
-                    }
-                    parameter.InsertParents(Convert.ToString(pair.Item1), parameter.Property.Name);
-                    return s + _builder(i, parameter.Parents).TrimEnd('&');
-                });
+                    yield return _propertyBuilder.Build(obj, "", new[] { parameter.Property.Name });
+                }
+                else
+                {
+                    parameter.InsertParents(Convert.ToString(index), parameter.Property.Name);
+                    foreach (var field in _builder(obj, parameter.Parents))
+                        yield return field;
+                }
+            }
         }
 
-        public void SetBuilder(Func<object, string[], string> builder)
+        public void SetBuilder(Func<object, string[], IEnumerable<Field>> builder)
         {
             _builder = builder;
         }

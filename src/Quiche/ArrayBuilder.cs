@@ -1,5 +1,6 @@
 namespace Quiche
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     internal class ArrayBuilder
@@ -11,9 +12,10 @@ namespace Quiche
             _propertyBuilder = propertyBuilder;
         }
 
-        public string Build(Parameter parameter)
+        public IEnumerable<Field> Build(Parameter parameter)
         {
-            return parameter.Objects.Aggregate("", (s, i) => s + _propertyBuilder.Build(i, parameter.Property.Name, parameter.Parents));
+            return parameter.Objects
+                .Select(o => _propertyBuilder.Build(o, parameter.Property.Name, parameter.Parents));
         }
     }
 }

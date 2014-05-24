@@ -1,8 +1,8 @@
 namespace Quiche
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
 
     internal class ComplexObjectBuilder
     {
@@ -21,7 +21,7 @@ namespace Quiche
             _mixedObjectArrayBuilder.SetBuilder(GetObjectString);
         }
 
-        internal string Build(Parameter parameter)
+        internal Field Build(Parameter parameter)
         {
             var property = parameter.Property;
             var parentFields = parameter.Parents;
@@ -30,37 +30,35 @@ namespace Quiche
             var propertyValue = property.GetValue(parameter.Value, null);
 
             if (propertyValue is ValueType || propertyValue is string)
-                return _propertyBuilder.Build(propertyValue, fieldName, parentFields).ToString();
+                return _propertyBuilder.Build(propertyValue, fieldName, parentFields);
 
             if (propertyValue == null)
-                return _nullBuilder.Build(fieldName, parentFields).ToString();
+                return _nullBuilder.Build(fieldName, parentFields);
 
-            var propString = GetObjectString(propertyValue, parentFields.Concat(new[] { fieldName }).ToArray());
-
-            return propString;
+            return new MultiField(GetObjectString(propertyValue, parentFields.Concat(new[] { fieldName }).ToArray()));
         }
 
-        internal string GetObjectString(object value, params string[] parentFields)
+        internal IEnumerable<Field> GetObjectString(object value, params string[] parentFields)
         {
             var props = value.GetType().GetProperties();
-            
-            var values = props.Select(property => new Parameter(value, property).AddParent(parentFields))
-                .Select(parameter =>
-                {
-                    if (!parameter.IsArray)
-                        return Build(parameter);
 
-                    if (parameter.IsSingleTypeArray)
-                        return _arrayBuilder.Build(parameter);
+            var parameters = props.Select(property => new Parameter(value, property).AddParent(parentFields));
 
-                    if (parameter.AreArrayObjectsValueTypes)
-                        return _mixedObjectArrayBuilder.Build(parameter);
+            foreach (var parameter in parameters)
+            {
+                if (!parameter.IsArray)
+                    yield return Build(parameter);
 
-                    throw new QuicheBuilderException(parameter);
-                });
-            
-            var joined = string.Join("", values);
-            return (parentFields == null || parentFields.Length == 0) ? joined.TrimEnd('&') : joined;
+                else if (parameter.IsSingleTypeArray)
+                    foreach (var field in _arrayBuilder.Build(parameter))
+                        yield return field;
+
+                else if (parameter.AreArrayObjectsValueTypes)
+                    foreach (var field in _mixedObjectArrayBuilder.Build(parameter))
+                        yield return field;
+
+                else throw new QuicheBuilderException(parameter);
+            }
         }
     }
 }

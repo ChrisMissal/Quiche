@@ -1,5 +1,6 @@
 ﻿namespace Quiche
 {
+    using System.Linq;
     using Settings;
 
     internal class QueryStringBuilder
@@ -18,7 +19,9 @@
 
         internal string Build(object value)
         {
-            return "?" + _complexObjectBuilder.GetObjectString(value);
+            return "?" + _complexObjectBuilder.GetObjectString(value)
+                .Aggregate("", (s, f) => s + f)
+                .TrimEnd('&');
         }
     }
 }
