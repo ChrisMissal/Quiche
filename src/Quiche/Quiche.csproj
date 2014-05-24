@@ -37,6 +37,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayBuilder.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="FieldBuilder.cs" />

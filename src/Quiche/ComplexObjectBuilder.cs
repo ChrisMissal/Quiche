@@ -6,23 +6,28 @@ namespace Quiche
 
     internal class ComplexObjectBuilder
     {
+        private readonly ArrayBuilder _arrayBuilder;
         private readonly MixedObjectArrayBuilder _mixedObjectArrayBuilder;
         private readonly PropertyBuilder _propertyBuilder;
         private readonly NullBuilder _nullBuilder;
 
-        internal ComplexObjectBuilder(PropertyBuilder propertyBuilder, NullBuilder nullBuilder, MixedObjectArrayBuilder mixedObjectArrayBuilder)
+        internal ComplexObjectBuilder(PropertyBuilder propertyBuilder, NullBuilder nullBuilder, MixedObjectArrayBuilder mixedObjectArrayBuilder, ArrayBuilder arrayBuilder)
         {
             _propertyBuilder = propertyBuilder;
             _nullBuilder = nullBuilder;
             _mixedObjectArrayBuilder = mixedObjectArrayBuilder;
+            _arrayBuilder = arrayBuilder;
 
             _mixedObjectArrayBuilder.SetBuilder(GetObjectString);
         }
 
-        internal string Build(object value, PropertyInfo property, params string[] parentFields)
+        internal string Build(Parameter parameter)
         {
+            var property = parameter.Property;
+            var parentFields = parameter.Parents;
+
             var fieldName = property.Name;
-            var propertyValue = property.GetValue(value, null);
+            var propertyValue = property.GetValue(parameter.Value, null);
 
             if (propertyValue is ValueType || propertyValue is string)
                 return _propertyBuilder.Build(propertyValue, fieldName, parentFields).ToString();
@@ -43,10 +48,10 @@ namespace Quiche
                 .Select(parameter =>
                 {
                     if (!parameter.IsArray)
-                        return Build(parameter.Value, parameter.Property, parameter.Parents);
+                        return Build(parameter);
 
                     if (parameter.IsSingleTypeArray)
-                        return parameter.Objects.Aggregate("", (s, i) => s + _propertyBuilder.Build(i, parameter.Property.Name, parameter.Parents));
+                        return _arrayBuilder.Build(parameter);
 
                     if (parameter.AreArrayObjectsValueTypes)
                         return _mixedObjectArrayBuilder.Build(parameter);
