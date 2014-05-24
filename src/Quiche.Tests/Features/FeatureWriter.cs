@@ -1,8 +1,6 @@
 namespace Quiche.Tests.Features
 {
-    using System;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using Fixie;
 

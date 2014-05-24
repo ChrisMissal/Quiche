@@ -41,11 +41,14 @@
     <Compile Include="Field.cs" />
     <Compile Include="FieldBuilder.cs" />
     <Compile Include="FieldConverter.cs" />
+    <Compile Include="MixedObjectArrayBuilder.cs" />
     <Compile Include="NullBuilder.cs" />
-    <Compile Include="ObjectBuilder.cs" />
+    <Compile Include="ComplexObjectBuilder.cs" />
+    <Compile Include="Parameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyBuilder.cs" />
     <Compile Include="QueryStringBuilder.cs" />
+    <Compile Include="QuicheBuilderException.cs" />
     <Compile Include="Settings\BuilderSettings.cs" />
     <Compile Include="Settings\FieldCasing.cs" />
   </ItemGroup>

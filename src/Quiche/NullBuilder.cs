@@ -8,7 +8,7 @@ namespace Quiche
         {
         }
 
-        public Field Build(object value, string field, params string[] parentFields)
+        public Field Build(string field, params string[] parentFields)
         {
             return new Field(field, null);
         }
