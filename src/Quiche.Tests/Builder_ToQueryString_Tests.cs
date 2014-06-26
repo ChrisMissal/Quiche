@@ -30,7 +30,6 @@
         {
             var builder = new Builder(x =>
             {
-                x.FieldCasing = FieldCasing.Custom;
                 x.CustomFieldConverter = s => s.ToUpper();
             });
             var result = builder.ToQueryString(new { Test = "blah" });

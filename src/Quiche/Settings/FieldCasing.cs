@@ -4,6 +4,5 @@
     {
         Default,
         CamelCase,
-        Custom,
     }
 }
