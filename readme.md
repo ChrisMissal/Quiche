@@ -39,7 +39,6 @@ Maybe Pascal or Camel casing isn't enough for you. You can transform your fields
 ```csharp
 var builder = new Builder(x =>
 {
-    x.FieldCasing = FieldCasing.Custom;
     x.CustomFieldConverter = s => s.ToUpper();
 });
 var result = builder.ToQueryString(new { Test = "blah" });
