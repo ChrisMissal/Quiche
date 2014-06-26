@@ -13,7 +13,6 @@ namespace Quiche
         {
             { FieldCasing.Default, s => s },
             { FieldCasing.CamelCase, ConvertToCamelCase },
-            { FieldCasing.Custom, null },
         };
 
         internal FieldConverter(BuilderSettings settings)
