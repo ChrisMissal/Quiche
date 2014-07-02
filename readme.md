@@ -32,6 +32,30 @@ var result = builder.ToQueryString(new MixedObject { ItemNames = new[] { "one", 
 result.ShouldBe("?itemNames=one&itemNames=two&textMessage=programming+is+fun");
 ```
 
+### Field Array Options
+
+You can override the default formatting of Arrays if you need.
+
+```csharp
+var builder = new Builder(x =>
+{
+    x.FieldArray = FieldArray.UseArraySyntax;
+});
+var result = builder.ToQueryString(new { cars = new[] { "Saab", "Audi", "Nissan", "Ford" } });
+
+result.ShouldBe("?cars[]=Saab&cars[]=Audi&cars[]=Nissan&cars[]=Ford");
+```
+
+```csharp
+var builder = new Builder(x =>
+{
+    x.FieldArray = FieldArray.UseCommas;
+});
+var result = builder.ToQueryString(new { cars = new[] { "Saab", "Audi", "Nissan", "Ford" } });
+
+result.ShouldBe("?cars=Saab%2cAudi%2cNissan%2cFord");
+```
+
 ### Custom Converter
 
 Maybe Pascal or Camel casing isn't enough for you. You can transform your fields using a custom function like so:
