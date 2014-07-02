@@ -17,7 +17,11 @@ namespace Quiche
 
         internal FieldConverter(BuilderSettings settings)
         {
-            _converter = settings.CustomFieldConverter ?? _fieldConverters[settings.FieldCasing];
+            var converter = settings.CustomFieldConverter ?? _fieldConverters[settings.FieldCasing];
+
+            _converter = settings.FieldArray == FieldArray.UseArraySyntax
+                ? (s => converter(s) + "[]")
+                : converter;
         }
 
         private static string ConvertToCamelCase(string field)

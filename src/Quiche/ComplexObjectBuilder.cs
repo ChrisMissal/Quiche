@@ -3,16 +3,19 @@ namespace Quiche
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Settings;
 
     internal class ComplexObjectBuilder
     {
         private readonly ArrayBuilder _arrayBuilder;
         private readonly MixedObjectArrayBuilder _mixedObjectArrayBuilder;
+        private readonly BuilderSettings _settings;
         private readonly PropertyBuilder _propertyBuilder;
         private readonly NullBuilder _nullBuilder;
 
-        internal ComplexObjectBuilder(PropertyBuilder propertyBuilder, NullBuilder nullBuilder, MixedObjectArrayBuilder mixedObjectArrayBuilder, ArrayBuilder arrayBuilder)
+        internal ComplexObjectBuilder(BuilderSettings settings, PropertyBuilder propertyBuilder, NullBuilder nullBuilder, MixedObjectArrayBuilder mixedObjectArrayBuilder, ArrayBuilder arrayBuilder)
         {
+            _settings = settings;
             _propertyBuilder = propertyBuilder;
             _nullBuilder = nullBuilder;
             _mixedObjectArrayBuilder = mixedObjectArrayBuilder;
@@ -50,9 +53,12 @@ namespace Quiche
                 if (!parameter.IsArray)
                     yield return Build(parameter);
 
-                else if (parameter.IsSingleTypeArray)
+                else if (parameter.IsSingleTypeArray && _settings.FieldArray != FieldArray.UseCommas)
                     foreach (var field in _arrayBuilder.Build(parameter))
                         yield return field;
+
+                else if (parameter.IsSingleTypeArray)
+                    yield return _propertyBuilder.Build(string.Join(",", parameter.Objects), parameter.Property.Name);
 
                 else if (parameter.AreArrayObjectsValueTypes)
                     foreach (var field in _mixedObjectArrayBuilder.Build(parameter))

@@ -51,6 +51,7 @@
     <Compile Include="QueryStringBuilder.cs" />
     <Compile Include="QuicheBuilderException.cs" />
     <Compile Include="Settings\BuilderSettings.cs" />
+    <Compile Include="Settings\FieldArray.cs" />
     <Compile Include="Settings\FieldCasing.cs" />
   </ItemGroup>
   <ItemGroup>

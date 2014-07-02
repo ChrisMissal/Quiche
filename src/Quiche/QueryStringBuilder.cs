@@ -14,7 +14,7 @@
             var mixedArrayObjectBuilder = new MixedObjectArrayBuilder(settings, propertyBuilder);
             var arrayBuilder = new ArrayBuilder(propertyBuilder);
 
-            _complexObjectBuilder = new ComplexObjectBuilder(propertyBuilder, nullBuilder, mixedArrayObjectBuilder, arrayBuilder);
+            _complexObjectBuilder = new ComplexObjectBuilder(settings, propertyBuilder, nullBuilder, mixedArrayObjectBuilder, arrayBuilder);
         }
 
         internal string Build(object value)

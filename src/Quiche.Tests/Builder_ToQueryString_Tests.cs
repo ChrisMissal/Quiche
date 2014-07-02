@@ -80,6 +80,39 @@
             result.ShouldBe("?Id=&Name=test");
         }
 
+        [Active("Arrays can be formatted with commas")]
+        public void Arrays_should_be_formatted_with_commas()
+        {
+            var builder = new Builder(x =>
+            {
+                x.FieldArray = FieldArray.UseCommas;
+            });
+            var result = builder.ToQueryString(new { cars = new[] { "Saab", "Audi", "Nissan", "Ford" } });
+
+            result.ShouldBe("?cars=Saab%2cAudi%2cNissan%2cFord");
+        }
+
+        [Active("Arrays can be formatted as multiple fields")]
+        public void Arrays_should_be_formatted_as_multiple_fields()
+        {
+            var builder = new Builder();
+            var result = builder.ToQueryString(new { cars = new[] { "Saab", "Audi", "Nissan", "Ford" } });
+
+            result.ShouldBe("?cars=Saab&cars=Audi&cars=Nissan&cars=Ford");
+        }
+
+        [Active("Arrays can be formatted as multiple field arrays")]
+        public void Arrays_should_be_formatted_as_multiple_field_arrays()
+        {
+            var builder = new Builder(x =>
+            {
+                x.FieldArray = FieldArray.UseArraySyntax;
+            });
+            var result = builder.ToQueryString(new { cars = new[] { "Saab", "Audi", "Nissan", "Ford" } });
+
+            result.ShouldBe("?cars[]=Saab&cars[]=Audi&cars[]=Nissan&cars[]=Ford");
+        }
+
         public void Simple_parent_child_object_should_return_expected_string()
         {
             var settings = new BuilderSettings { FieldCasing = FieldCasing.CamelCase };

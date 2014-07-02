@@ -7,6 +7,7 @@
         private static readonly BuilderSettings Defaults = new BuilderSettings
         {
             FieldCasing = FieldCasing.Default,
+            FieldArray = FieldArray.Default,
         };
 
         internal static BuilderSettings DefaultSettings
@@ -15,6 +16,7 @@
         }
 
         public FieldCasing FieldCasing { get; set; }
+        public FieldArray FieldArray { get; set; }
 
         public Func<string, string> CustomFieldConverter { get; set; }
     }
