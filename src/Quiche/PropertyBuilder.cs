@@ -16,11 +16,11 @@ namespace Quiche
         internal Field Build(object propertyValue, string fieldName, params string[] parentFields)
         {
             return (parentFields != null && parentFields.Length > 0)
-                        ? GetPropertyValueQuerySTring(propertyValue, fieldName, parentFields)
+                        ? GetPropertyValueQueryString(propertyValue, fieldName, parentFields)
                         : GetSimpleValueQueryString(propertyValue, fieldName);
         }
 
-        private Field GetPropertyValueQuerySTring(object value, string field, params string[] parentFields)
+        private Field GetPropertyValueQueryString(object value, string field, params string[] parentFields)
         {
             var greatestAncestorField = parentFields.First();
             var descendantFields = parentFields.Concat(new[] { field })
