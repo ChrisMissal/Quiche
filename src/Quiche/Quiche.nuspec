@@ -10,6 +10,7 @@
     <description>$description$</description>
     <projectUrl>http://chrismissal.com/Quiche/</projectUrl>
     <licenseUrl>https://raw.github.com/ChrisMissal/Quiche/master/license.txt</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/ChrisMissal/Quiche/2caf0179e0550ed3ab5718afe917015385882ee8/assets/logo/Complete.128.png</iconUrl>
     <copyright>Copyright 2014 Chris Missal</copyright>
     <tags>querystring transform url uri</tags>
   </metadata>
