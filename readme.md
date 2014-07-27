@@ -74,6 +74,11 @@ result.ShouldBe("?TEST=blah");
 
 [Version 0.0.5](docs/Quiche-0.0.5-features.md)
 
+## Contributors
+
+* [@ChrisMissal](https://github.com/ChrisMissal) - code
+* [@timgthomas](https://github.com/timgthomas) - logo
+
 ### License
 
 The MIT License
