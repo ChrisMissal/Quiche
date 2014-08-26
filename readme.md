@@ -70,7 +70,7 @@ result.ShouldBe("?TEST=blah");
 
 ## Features
 
-[Version 0.0.5](docs/Quiche-0.0.5-features.md)
+[Version 0.1.0](docs/Quiche-0.1.0-features.md)
 
 ## Contributors
 
