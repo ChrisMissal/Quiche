@@ -66,6 +66,8 @@ var result = builder.ToQueryString(new { Test = "blah" });
 result.ShouldBe("?TEST=blah");
 ```
 
+## Build Status
+
 [![chrismissal MyGet Build Status](https://www.myget.org/BuildSource/Badge/chrismissal?identifier=347aee1d-fd73-451d-845b-b2c834150a82)](https://www.myget.org/)
 
 ## Features
