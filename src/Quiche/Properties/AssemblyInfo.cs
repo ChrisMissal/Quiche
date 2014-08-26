@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Quiche")]
-[assembly: AssemblyDescription("Objects baked into a URLs")]
+[assembly: AssemblyDescription("A tasty little treat that turns your objects into query strings. (a.k.a. Objects baked into a URLs)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Chris Missal")]
 [assembly: AssemblyProduct("Quiche")]
